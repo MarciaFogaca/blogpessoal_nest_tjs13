@@ -1,16 +1,27 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common/pipes/validation.pipe';
+import { ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(process.env.PORT ?? 4000);
 
-  process.env.TZ = '-3:00';
+  process.env.TZ = '-03:00';
 
   app.useGlobalPipes(new ValidationPipe());
-
-  // Habilitar CORS para permitir requisições de outros domínios, origens ou portas (necessário para o frontend acessar a API)//
   app.enableCors();
+
+  const config = new DocumentBuilder()
+    .setTitle('Blog Pessoal')
+    .setDescription('Projeto Blog Pessoal ')
+    .setContact("Márcia Telles Fogaça", "https://github.com/MarciaFogaca", "marcia@email.com")
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+    
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('/swagger', app, document);
+
+  await app.listen(process.env.PORT || 4000);
 }
 bootstrap();

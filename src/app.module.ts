@@ -1,29 +1,26 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PostagemModule } from './postagem/postagem.module';
-//import { Postagem } from './postagem/entities/postagem.entity';
 import { TemaModule } from './tema/tema.module';
-//import { Tema } from './tema/entities/tema.entity';
-import { AuthModule } from './auth/auth.module';
 import { UsuarioModule } from './usuario/usuario.module';
-//import { Usuario } from './usuario/entities/usuario.entity';
-import { AppController } from './app.controller';
-//import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-   // ConfigModule.forRoot(),/*
-    /*TypeOrmModule.forRootAsync({
-	    useClass: ProdService,
-      imports: [ConfigModule],
+    ConfigModule.forRoot({ isGlobal: true }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        url: configService.get<string>('DATABASE_URL'),
+        autoLoadEntities: true,
+        synchronize: true, 
+        ssl: true,
+        extra: { ssl: { rejectUnauthorized: false } },
+      }),
     }),
-  */
-    PostagemModule,
-    TemaModule,
-    AuthModule,
-    UsuarioModule
+    PostagemModule, TemaModule, UsuarioModule, AuthModule,
   ],
-  controllers: [AppController],
-  providers: [],
 })
 export class AppModule {}
