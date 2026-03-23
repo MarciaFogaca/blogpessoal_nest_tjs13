@@ -9,7 +9,7 @@ import { JwtAuthGuard } from "../../auth/guard/jwt-auth.guard";
 
 //@ApiTags('Postagens')
 //@AppiBearerAuth()
-//@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('/postagens')
 export class PostagemController {
   constructor(private readonly postagemService: PostagemService) {}

@@ -17,7 +17,7 @@ export class AuthService {
     if (buscaUsuario) {
         const senhaCorreta = await bcrypt.compare(senha, buscaUsuario.senha);
         if (senhaCorreta) {
-            const { senha, ...result } = buscaUsuario; // Esconde a senha por segurança
+            const { senha, ...result } = buscaUsuario;
             return result;
         }
     }
