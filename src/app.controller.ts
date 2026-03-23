@@ -1,13 +1,11 @@
-import { Controller, Get, Res } from '@nestjs/common';
-//import { ApiExcludeEndpoint } from '@nestjs/swagger';
+import { Controller, Get } from '@nestjs/common';
 
 @Controller()
 export class AppController {
   constructor() {}
 
-  //@ApiExcludeEndpoint()
   @Get()
-  async redirect(@Res() resposta: any) {
-    return resposta.redirect('/swagger');
+  getHello(): string {
+    return "🚀 Bem-vinda(o) ao Blog Pessoal de Márcia Telles Fogaça!!";
   }
 }
